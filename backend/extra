@@ -1,0 +1,955 @@
+  // =============================================theory==============================================
+
+//BACKEND STEPS of signup page
+// 1. Express intsall  krvaya or use initialize krna
+// 2. mongoose install krke mongo db se connect krna
+// 3. bodyparser ko install krna jo data ko jsn formate me convert krega taki mongodb or adminpage me data store ho jae
+// 4. server ko btana ki data kha (konse localhost)se lena he or ky ky crud operation krne he iske liye cors ko install krke set krna
+// 5. cookieparser ko insall krna jo aane vale data ki id track krke monogodb me store krna etc operation ke  liye id ko hadle krega
+// 6. multer ko install krna jo hmare frontend ki image ect ko upload krne ka kaam handle krega
+// 7. fir scheme bnana yani mongo db me data store kene ke liye ky ky feild chaye vo set krna || ye hum direct khud ki file me bna skte he or nyi file bna ke bhi use kr skte he
+// 8. post method ka use kiya post method signup page data leke mongo db me dal dega jise hum baad me get method se admin ko dikha skte he
+// 9. get method post method se mongo db me dale hue data ko admin ke page pr get krta he 
+// 10. bcrypt ko install krna ye password ko secure bnata he.
+
+
+//BACKEND STEPS of Login page
+// 
+// Here’s an explanation of each module in simple terms:
+
+// ---
+
+// ### **1. `express`**
+// - **What it does**: Helps create a web server and manage how the server handles incoming requests and sends responses.
+// - **Why it’s useful**: It makes it easier to define routes (like `/signup`, `/user`) and set up web services.
+
+// ---
+
+// ### **2. `mongoose`**
+// - **What it does**: Makes it simple to connect your Node.js application to a MongoDB database and manage the data.
+// - **Why it’s useful**: It provides tools to define the structure of your data (schemas) and perform actions like saving, updating, or retrieving data.
+
+// ---
+
+// ### **3. `cookie-parser`**
+// - **What it does**: Helps the server read cookies from incoming HTTP requests.
+// - **Why it’s useful**: Cookies often store small pieces of information, like session IDs, to track users on a website.
+
+// ---
+
+// ### **4. `bcrypt`**
+// - **What it does**: Encrypts passwords to make them secure.
+// - **Why it’s useful**: Instead of storing plain text passwords, it scrambles them (hashing) so that even if someone hacks the database, they can’t easily figure out the passwords.
+
+// ---
+
+// ### **5. `cors`**
+// - **What it does**: Allows the server to accept requests from a different domain or origin (e.g., your frontend running on `http://localhost:3000` while the backend runs on `http://localhost:8000`).
+// - **Why it’s useful**: Modern web apps often have a frontend and backend running separately, and `cors` ensures they can communicate.
+
+// ---
+
+// ### **6. `body-parser`**
+// - **What it does**: Reads the data sent by the user (e.g., in a signup form) and converts it into a format the server can understand (like JSON).
+// - **Why it’s useful**: Without this, the server would struggle to understand data sent by users.
+
+// ---
+
+// ### **7. `path`**
+// - **What it does**: Provides tools to work with file and folder paths.
+// - **Why it’s useful**: For example, you can use it to serve files (like images or JavaScript) from specific directories on your server.
+
+// ---
+
+// ### **8. `multer`**
+// - **What it does**: Handles file uploads, like when a user submits an image or document.
+// - **Why it’s useful**: It lets you easily store files in a folder on your server and access them later.
+
+// ---
+
+// These modules work together to make the backend efficient, secure, and easy to manage!
+
+
+// Pushpendra singh tanwar <pushpendrasinghtanwar094@gmail.com>
+// 11:21 (38 minutes ago)
+// to me
+
+//=========================================signup page====================================================
+
+// import { useState } from 'react'
+// import { Link } from 'react-router-dom'
+// import axios from 'axios'
+// import { useNavigate } from 'react-router-dom'
+// import Navbar from './Navbar'
+// // import Navbar from './Navbar'
+
+//  function Signup() {
+//     const [name, setName]= useState('')
+//     const [email, setEmail]= useState('')
+//     const [phone, setPhone]=useState('')
+//     const [password, setPassword]= useState('')
+//     const navigate = useNavigate()
+//     const handleSubmit = (e) =>{
+//       e.preventDefault()
+//       axios.post('http://localhost:5002/signup', {username:name, email, password,phone})
+//       .then(result => {console.log(result)
+//         navigate("/login")
+//       })
+
+//       .catch(err=> console.log(err))
+//     }
+//   return (
+//     <div >
+//        {/* <Navbar/> */}
+//        <Navbar/>
+//     <div className='d-flex justify-content-center align-item-center color ' style={{padding:"20px"}}>
+       
+//       <div className=" color1 p-3 rounded form">
+//   <h2>Signup</h2>
+//   <form onSubmit={handleSubmit}>
+//   <div className="mb-3 mt-3">
+//       <label htmlFor="name"><b>Name:</b></label><br></br>
+//       <input type="name" style={{ border:"none", }} className="form-control rounded-1 " id="name" placeholder="Enter Name" name="name"
+//        value={name}
+//        onChange={(e)=>setName(e.target.value)}
+//        required
+//       />
+//     </div>
+//     <div className="mb-3 mt-3">
+//       <label htmlFor="email"><b>Email:</b></label><br></br>
+//       <input type="email" style={{border:"none",}} className="form-control rounded-1" id="email" placeholder="Enter email" name="email"
+//        value={email}
+//        onChange={(e)=>setEmail(e.target.value)}  required
+//       />
+//     </div>
+//     <div className="mb-3 mt-3">
+//       <label htmlFor="phone"><b>Phone:</b></label><br></br>
+//       <input type="name" style={{ border:"none", }} className="form-control rounded-1" id="phone" placeholder="Enter phone no." name="phone"
+//        value={phone}
+//        onChange={(e)=>setPhone(e.target.value)}  required
+//       />
+//     </div>
+//     <div className="mb-3">
+//       <label htmlFor="pwd"><b>Password:</b></label><br></br>
+//       <input type="password" style={{ border:"none", }} className="form-control rounded-1" id="pwd" placeholder="Enter password" name="pwd" 
+//        value={password}
+//        onChange={(e)=> setPassword(e.target.value)}  required
+//       />
+//     </div>
+//     <button type="submit" className="btn  w-100 rounded-1"  style={{ border:"1px solid", color:"#5f6b97", }}><b>Register</b></button>
+//     </form>
+//     <p><b style={{color:"white"}}>Already Have an Account  </b></p>
+//     <Link to="/login" className='btn btn-default  w-100  rounded-1 text-decoration-none' style={{ border:"1px solid", color:"#5f6b97"}}><b> LOGIN</b> </Link>
+ 
+  
+// </div>
+//     </div>
+//     </div>
+//   )
+// }
+// export default Signup;
+
+
+// / const express = require('express');
+// const mongoose = require('mongoose');
+// const bodyParser = require('body-parser');
+// const bcrypt = require('bcrypt');
+// const cors = require('cors');
+// const app = express();
+
+// // Middleware
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(cors({ origin: 'http://localhost:3000', methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
+
+// // Connect to MongoDB
+// mongoose.connect('mongodb://127.0.0.1:27017/mydata1')
+//   .then(() => console.log('Connected to MongoDB'))
+//   .catch(err => console.error('MongoDB connection error:', err));
+
+// // Mongoose Schema
+// const DataSchema = new mongoose.Schema({
+//   username: { type: String, required: true },
+//   phone: { type: Number, required: true },
+//   password: { type: String, required: true },
+//   email: { type: String, required: true }
+// });
+// const Data = mongoose.model('Data', DataSchema);
+
+// // Fetch users
+// app.get('/user', async (req, res) => {
+//   try {
+//     const data = await Data.find();
+//     if (data.length) {
+//       return res.status(200).json({ code: 200, message: 'Data fetched successfully', data });
+//     } else {
+//       return res.status(404).json({ code: 404, message: 'No data found' });
+//     }
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//     return res.status(500).json({ code: 500, message: 'Internal server error' });
+//   }
+// });
+
+// // Start server
+// const PORT = 8000;
+// app.listen(PORT, () => {
+//   console.log(`Server is running at ${PORT}`);
+// });
+
+
+//===========================================all apge====================================================
+
+// const express = require('express')
+// const mongoose = require('mongoose')
+// const bcrypt = require('bcrypt')
+// const bodyParser = require('body-parser')
+// const User = require('./Modle/UserModle')
+// const app = express()
+// const jwt = require("jsonwebtoken")
+// const CarController = require('./Controller/CarController')
+// const Feed = require('./Modle/feedbackModle')
+
+// const path = require('path');
+// app.use(express.static(path.join(__dirname, 'public')));
+
+
+// // ========================MULTER AND UPLOAD FOLDER ====================================================
+
+// const multer = require("multer")
+// const upload = multer({ dest: 'uploads/' })
+// app.use('/uploads', express.static('uploads'))
+
+// //=======================CORS LIBEREY  ================================================================
+// const cors = require('cors')
+// app.use(cors({
+//     origin: ["http://localhost:3000"],
+//     methods:["GET", "POST", "PUT", "DELETE"],
+//     credentials:true
+//   }));
+
+// app.use(express.json());    
+// app.use(cookieParser())
+// app.use(bodyParser.json());
+// // ========================MONGOODB CONNECTION =========================================================================
+// //
+// mongoose.connect('mongodb://127.0.0.1:27017/udaipur')
+// //  mongoose.connect('mongodb+srv://dbTours:dbUdaipurTours@tour.oobe1.mongodb.net/Tour?retryWrites=true&w=majority ')
+// .then(()=>{
+//     console.log("mongoodb connected successfull ")
+// }).catch(err => {
+//     console.log(err)
+// })
+
+// //========================================SINGUP ========================================================================
+// app.post('/signup', (req, res) => {
+//     const {username, email, phone, password}= req.body
+//     bcrypt.hash(password, 10 )
+//     .then(hash =>{
+//         User.create({username, email,password:hash, phone })
+//         .then(users => res.json('Success'))
+//         .catch(err => res.json(err));
+
+//     }).catch(err => console.log(err.massage))
+// })
+// //======================================LOGIN==============================================================================
+// app.post('/login', (req, res)=>{
+//     const {email, password} = req.body;
+//     if (!email || !password) {
+//       return res.status(400).json({ message: 'Email and password are required' });
+//     }
+//     Data.findOne({email:email})
+//     .then(user =>{
+//       if(user){
+//       bcrypt.compare(password, user.password, (err, result)=>{
+       
+//         if(result){
+//           const token = jwt.sign({email: user.email, role: user.role},
+//             "jwt-secret-key", {expiresIn:'1d'})
+//             res.cookie('token', token)
+//           return res.json({ Status: "Success", role: user.role, id: user._id ,username: user.username, 
+//             phone: user.phone,      
+//             email: user.email 
+//                });
+             
+//         }else{ res.json('the password is incorrect')
+          
+//         }
+//       })
+       
+//       }else{
+//         res.status(500).json("no record existed")
+//       }
+//     })
+  
+//    })
+// //====================================================LOGOUT================================================================
+//    app.use('/logout', (req, res)=>{
+//     res.clearCookie('token')
+//     return res.json({status : true})
+//    })
+// // ==================================================VARIFICATION===========================================================
+  //  const varifyUser = (req, res, next )=>{
+  //   const token =req.cookies.token;
+  //   if(!token){
+  //     return res.json("token is miss")
+  //   }else{
+  //     jwt.verify(token, "jwt-secret-key", (err, decoded)=>{
+  //       if(err){
+  //         return res.json("err with token")
+  //       }else{
+  //         if(decoded.role === "admin"){
+  //           next()
+  //         }else{
+  //           return res.json("not admin")
+  //         }
+  //       }
+  //     })
+  //   }
+  // } 
+  // app.get('/Dashboard', varifyUser , (req, res)=>{
+  //   res.json("Success")
+  // })
+//   app.get('/carrental', varifyUser , (req, res)=>{
+//     res.json("Success")
+//   })
+//   app.get('/packages', varifyUser , (req, res)=>{
+//     res.json("Success")
+//   })
+//   app.get('/order', varifyUser , (req, res)=>{
+//     res.json("Success")
+//   })
+//   app.get('/pack', varifyUser , (req, res)=>{
+//     res.json("Success")
+//   })
+//   app.get('/feed', varifyUser , (req, res)=>{
+//     res.json("Success")
+//   })
+//   // ============================================USER ID GET LOGIN ==========================================================================
+  // app.get('/api/user/:id', (req, res) => {
+  //   const { id } = req.params;
+  //   if (!mongoose.Types.ObjectId.isValid(id)) {
+  //     return res.status(400).json({ message: 'Invalid user ID' });
+  //   }
+  
+  //   Data.findById(id)
+  //     .then(user => {
+  //       if (user) {
+  //         res.json(user);
+  //       } else {
+  //         res.status(404).json({ message: 'User not found' });
+  //       }
+  //     })
+  //     .catch(err => {
+  //       res.status(500).json({ message: 'Internal server error' });
+  //     });
+  // });
+  
+
+// app.listen(5002, ()=>{
+//     console.log('Server is running on 5002 ')
+// })
+
+
+// // =============================================== ALL CONTROLLER URL ============================================================
+//    //================car controller ===========================
+// app.post('/api/carrental',upload.single('image'), CarController.postcar)
+// app.get('/api/carrental', CarController.getcar)
+// app.get('/api/carrental/:id',upload.single('imageUrl'), CarController.getcarid)
+// app.put('/api/carrental/:id',upload.single('imageUrl'), CarController.putcar)
+// app.delete('/api/carrental/:id' , CarController.deletecar)
+
+// // =================packages controller ========================
+
+// app.post('/api/packages',upload.single('image'), CarController.packages)
+// app.get('/api/packages',CarController.getpackages)
+// app.get('/api/packages/:id',upload.single('imageUrl'), CarController.getpackagesbyid)
+// app.put('/api/packages/:id',upload.single('imageUrl'), CarController.postpackages)
+// app.delete('/api/packages/:id' , CarController.deletepackage)
+
+// // ====================COUNT USER, ORDER AND PACKAGE ====================================================================
+// app.get('/api/home' , CarController.getSummery) 
+// //======================= booking =======================================================================================
+// app.post('/api/users', CarController.postbook)
+// app.get('/api/booking', CarController.getbook)
+// app.delete('/api/booking/:id', CarController.deletebooking)
+// app.get('/api/booking/:id', CarController.getbookid)
+// app.put('/api/booking/:id' , CarController.putbooking)
+
+// //============================== Packages booking =================================
+// app.post('/api/udaipur' , CarController.udaipur)
+// app.get('/api/udaipur', CarController.getudaipur)
+// app.delete('/api/udaipur/:id', CarController.deleteudaipur)
+// app.get('/api/udaipur/:id', CarController.getpackid )
+// app.put('/api/udaipur/:id', CarController.putpack)
+
+// // =============================== CUSTOMER FEED BACK =====================================
+// app.post('/api/customer', CarController.customer)
+// app.get('/api/customer', CarController.getfeed)
+// app.delete('/api/customer/:id', CarController.deletefeed)
+// app.get('/api/customer/:id', CarController.getfeedid)
+// app.put('/api/customer/:id',CarController.putfeed )
+
+
+// app.put('/api/customer/:id/toggleHide', async (req, res) => {
+//   try {
+//     const review = await Feed.findById(req.params.id);
+//     if (!review) {
+//       return res.status(404).json({ message: 'Review not found' });
+//     }
+
+//     // Toggle the 'hidden' property
+//     review.hidden = !review.hidden;
+//     await review.save();
+
+//     res.status(200).json({ message: 'Hidden state updated', data: review });
+//   } catch (err) {
+//     res.status(500).json({ message: 'Server error', error: err.message });
+//   }
+// });
+
+
+
+// ==============================================login backend===================================
+
+
+// app.post('/login', async (req, res) => {
+//   const { email, password } = req.body;
+
+//   // Validate input
+//   if (!email || !password) {
+//     return res.status(400).json({ success: false, message: 'Email and password are required' });
+//   }
+
+//   try {
+//     // Find user by email
+//     const user = await Data.findOne({ email });
+//     if (!user) {
+//       return res.status(401).json({ success: false, message: 'Invalid email or password' });
+//     }
+
+//     // Check password
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+//     if (!isPasswordValid) {
+//       return res.status(401).json({ success: false, message: 'Invalid email or password' });
+//     }
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       { id: user._id, email: user.email, role: user.role },
+//       process.env.JWT_SECRET,
+//       { expiresIn: '1d' }
+//     );
+
+//     // Set token as an HTTP-only cookie
+//     res.cookie('token', token, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === 'production',
+//       sameSite: 'strict',
+//     });
+
+//     // Respond with success
+//     res.status(200).json({
+//       success: true,
+//       message: 'Login successful',
+//       user: { id: user._id, email: user.email, role: user.role },
+//     });
+//   } catch (error) {
+//     console.error('Login error:', error.message, error.stack);
+//     res.status(500).json({ success: false, message: ' server error' });
+//   }
+// });
+
+
+// const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     // Replace this URL with your backend login endpoint
+  //     // const response = await axios.get('http://localhost:8000/login', { email, password });
+
+  //     const response = await axios.post('/login', { email, password });
+
+  //     if (response.data.success) {
+  //       // Redirect to home page if login is successful
+  //       navigate('/home');
+  //     } else {
+  //       // Show an error message if login fails
+  //       alert(response.data.message || 'Invalid email or password!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during login:', error);
+  //     alert('Something went wrong. Please try again later.');
+  //   }
+  // };
+
+
+  // import React from 'react'
+// import { useState } from 'react'
+// import { Link, useNavigate } from 'react-router-dom'
+// import axios from 'axios'
+// // import Navbar from './Navbar'
+// // import logo from '../image/logo.jpg'
+// function Login() {
+
+//    const [errors, setErrors] = useState({});
+   
+//    const [formData, setFormData]= useState({
+//     email:'',
+//     password:'',
+//    })
+   
+//    const navigate = useNavigate()
+
+//    const handleChange = (e)=>{
+   
+//     const {name , value} = e.target
+// setFormData({
+//   ...formData, [name] :value
+// })
+
+//    }
+//     axios.defaults.withCredentials = true;
+
+//   //  const handleSubmit = (e) =>{
+//   //    e.preventDefault();
+//   //    axios.post('http://localhost:8000/login', { 
+//   //      email: formData.email,
+//   //     password: formData.password,})
+
+      
+     
+//   //     .then(result => {
+//   //       if (result.data.Status === "Success") {
+//   //         const userId = result.data.id;
+//   //         sessionStorage.setItem('userId', userId);
+      
+//   //         // Fetch user details using userId
+//   //         axios.get(`http://localhost:8000/api/user/${userId}`)
+//   //         .then(profileRes => {
+//   //           const userData = profileRes.data;
+//   //           sessionStorage.setItem('username', userData.username);
+//   //           sessionStorage.setItem('phone', userData.phone);
+//   //           sessionStorage.setItem('email', userData.email);
+//   //           // sessionStorage.setItem('Date', userData.Date);
+//   //           // if (result.data.address)   sessionStorage.setItem('address', userData.address);
+//   //           // if (result.data.classes) sessionStorage.setItem('classes', userData.classes);
+//   //           // if (result.data.gender) sessionStorage.setItem('gender', userData.gender);
+//   //           // if (result.data.language) sessionStorage.setItem('language', userData.language);
+//   //           // if (result.data.Date) sessionStorage.setItem('language', userData.Date);
+//   //           // if (result.data.classes) sessionStorage.setItem('city', userData.city);
+//   //           // if (result.data.classes) sessionStorage.setItem('state', userData.state);
+      
+//   //           if (result.data.role === "admin") {
+//   //             navigate('/Dashboard');
+//   //             alert('Admin login successful');
+//   //           } else {
+//   //             alert('login successful');
+//   //             navigate(`/user/${userId}`);
+//   //           }
+//   //         })
+//   //         .catch(profileErr => {
+//   //           console.error("Error fetching user profile: ", profileErr);
+//   //         });
+//   //       } else {
+//   //         alert('login failed')
+//   //         console.error('Login failed');
+//   //       }
+//   //     })
+//   //     .catch(err => {
+//   //       if (err.response) {
+//   //         console.error("Server responded with error:", err.response.data);
+//   //         alert(err.response.data.message || "Server error occurred!");
+//   //       } else if (err.request) {
+//   //         console.error("No response received:", err.request);
+//   //         alert("No response from server. Please check your connection.");
+//   //       } else {
+//   //         console.error("Unexpected error:", err.message);
+//   //         alert("An unexpected error occurred. Please try again.");
+//   //       }
+//   //     });
+      
+//   //   const validationErrors={}
+//   //   if(!formData.email.trim()){
+//   //     validationErrors.email = "email is required"
+//   //   }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)){
+//   //     validationErrors.email = "email is not valid"
+//   //   }
+//   //   if(!formData.password.trim()){
+//   //     validationErrors.password = "password is required"
+//   //   }else if(formData.password.length<4){
+//   //     validationErrors.password = "password should be at least 4 char"
+//   //     // navigate('/login')
+//   //   }
+
+//   //   setErrors(validationErrors)
+//   //   if(Object.keys(validationErrors).length === 0){
+//   //     // alert(" Login successfully")
+//   //     console.log("login successfull")
+//   //   }else{
+//   //     alert("password in incorrect")
+//   //   }
+    
+
+//   // }
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+  
+//     try {
+//       const response = await axios.post('http://localhost:8000/login', {
+//         email: formData.email,
+//         password: formData.password,
+//       });
+  
+//       if (response.data.status === 'Success') {
+//         console.log('Login successful');
+//         navigate('/home');
+//       } else {
+//         alert(response.data.message || 'Login failed');
+//       }
+//     } catch (error) {
+//       console.error('Login error:', error.response?.data || error.message);
+//       alert(error.response?.data?.message || 'Something went wrong');
+//       console.log(setErrors)
+//     }
+//   };
+  
+//   return(
+//     <div className='login'>
+//     <div className='color '>
+//       {/* <Navbar/> */}
+//       <div className='container-fluid  mt-3' style={{margin:"10px"}}>
+//         <div className='row'>
+//           <div className=' d-flex justify-content-center align-item-center col-md-6 mt-3' style={{padding:"30px"}} >
+//             <div className='p-3 rounded '>
+//             <img src="../image/logo.jpg" alt='alt'
+//              style={{width:"100%",  height:"400px", }}
+//              ></img>
+//           </div></div>  
+//     <div className=' col-md-6'>
+        
+//     <div className='d-flex justify-content-center align-item-center color '>
+    
+//       <div className=" color1 p-3 rounded ">
+//   <h2>Login
+
+//   </h2>
+//   <form onSubmit={handleSubmit}>
+  
+//     <div className="mb-3 mt-3">
+//       <label htmlFor="email"><b>Email:</b></label><br></br>
+//       <input type="email" className="form-control rounded-1" style={{background:"#a0a2bd", border:"none", color:"#5f6b97"}} id="email" placeholder="Enter email" name="email"
+//        value={formData.email}
+//       //  onChange={(e)=>setEmail(e.target.value)}
+//       onChange={handleChange}
+//        required
+//        autoComplete='off'
+//       />
+//       {errors.email && <span>{errors.email}</span> }     
+//     </div>
+//     <div className="mb-3">
+//       <label htmlFor="pwd"><b>Password:</b></label><br></br>
+//       <input type="password" className="form-control rounded-1" style={{background:"#a0a2bd", border:"none", color:"#5f6b97"}} id="pwd" placeholder="Enter password" name="password" 
+//        value={formData.password}
+//       //  onChange={(e)=> setPassword(e.target.value)}
+//       onChange={handleChange}
+//        required
+//       />
+//          {errors.password && <span>{errors.password}</span> }   
+//     </div>
+//     <button type='submit' className='btn btn-default border w-100 rounded-1 text-decoration-none' style={{background:"#0b1a53", border:"none", color:"#5f6b97"}}>Login</button>
+//     <br></br>
+//     <Link to="/forgotpassword"  style={{color:'white'}}>Forgotpassword</Link>
+//     <br></br><br></br>
+//     <Link to="/register" className='btn btn-default border w-100 rounded-1 text-decoration-none ' style={{background:"#0b1a53",  border:"none", color:"#5f6b97"}}> SIGN UP </Link>
+//     </form>
+//     </div>
+//     </div></div>
+//     </div></div>
+//     </div>
+//     </div>
+//   )
+// }
+
+// export default Login;
+
+
+
+// import React, { useState } from 'react';
+// import axios from 'axios';
+
+// const Login = () => {
+//   const [formData, setFormData] = useState({
+//     email: '',
+//     password: ''
+//   });
+
+//   const handleChange = (e) => {
+//     setFormData({
+//       ...formData,
+//       [e.target.name]: e.target.value
+//     });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     // Make sure the email and password fields are not empty
+//     if (!formData.email || !formData.password) {
+//       alert('Please enter both email and password');
+//       return;
+//     }
+
+//     try {
+//       // Send POST request to the backend
+//       const response = await axios.post('http://localhost:8000/login', formData);
+
+//       // Handle successful login
+//       console.log('Login successful:', response.data);
+//       // Store the token (localStorage, state, etc.)
+//     } catch (error) {
+//       // Handle login failure
+//       console.error('Login failed:', error.response ? error.response.data : error.message);
+//       alert('Invalid credentials');
+//     }
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <input
+//         type="email"
+//         name="email"
+//         value={formData.email}
+//         onChange={handleChange}
+//         placeholder="Email"
+//         required
+//       />
+//       <input
+//         type="password"
+//         name="password"
+//         value={formData.password}
+//         onChange={handleChange}
+//         placeholder="Password"
+//         required
+//       />
+//       <button type="submit">Login</button>
+//     </form>
+//   );
+// };
+
+// export default Login;
+
+
+// email check
+// const checkEmail = async () => {
+        //   const email = 'example@example.com'; // Replace with user input
+        //   try {
+        //     const response = await fetch('/check-email', {
+        //       method: 'POST',
+        //       headers: {
+        //         'Content-Type': 'application/json',
+        //       },
+        //       body: JSON.stringify({ email }),
+        //     });
+        
+        //     const data = await response.json();
+        
+        //     if (data.success) {
+        //       alert('Email exists in the system');
+        //     } else {
+        //       alert(data.message); // Show the message from the server
+        //     }
+        //   } catch (error) {
+        //     console.error('Error checking email:', error);
+        //     alert('Something went wrong');
+        //   }
+        // };
+
+        {/* 
+            <label htmlFor="name"><b>Name:</b></label><br></br>
+      <input type="name" style={{ border:"none", }} className="form-control rounded-1 " id="name" placeholder="Enter Name" name="name"
+        value={name}
+       onChange={(e)=>setName(e.target.value)}
+        required
+       />
+     </div> */}
+
+     {/* <div className="mb-3 mt-3">
+      <label htmlFor="email"><b>Email:</b></label><br></br>
+      <input type="email" style={{border:"none",}} className="form-control rounded-1" id="email" placeholder="Enter email" name="email"
+       value={email}
+      onChange={(e)=>setEmail(e.target.value)}  required
+      />
+     </div> */}
+
+      {/* <div className="mb-3 mt-3">
+       <label htmlFor="phone"><b>Phone:</b></label><br></br>
+      <input type="name" style={{ border:"none", }} className="form-control rounded-1" id="phone" placeholder="Enter phone no." name="phone"
+        value={phone}
+        onChange={(e)=>setPhone(e.target.value)}  required
+       />
+     </div> */}
+
+     {/* 
+            <div className="mb-3">
+      <label htmlFor="pwd"><b>Password:</b></label><br></br>
+       <input type="password" style={{ border:"none", }} className="form-control rounded-1" id="pwd" placeholder="Enter password" name="pwd" 
+        value={password}
+        onChange={(e)=> setPassword(e.target.value)}  required
+       />
+     </div> */}
+           {/* 
+            <div className="mail1">
+              <label htmlFor="confirmPassword"><h3 className='lgsize2 label1'>Confirm Password:</h3></label>
+              <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" className='input3 he1' />
+            </div> */}
+
+                        {/* <input type="submit" value="Sign up" className="submit" /> */}
+// singup page with accounty echeck
+// import React, { useState } from 'react';
+// import './App.css';
+// import { Link } from 'react-router-dom';
+// import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+
+// function Signup() {
+//   const [name, setName] = useState('');
+//   const [email, setEmail] = useState('');
+//   const [phone, setPhone] = useState('');
+//   const [password, setPassword] = useState('');
+//   const [message, setMessage] = useState('');
+//   const [isError, setIsError] = useState(false);
+//   const navigate = useNavigate();
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setMessage('');
+//     setIsError(false);
+
+//     // Client-side validation
+//     if (!name || !email || !phone || !password) {
+//       setMessage('All fields are required!');
+//       setIsError(true);
+//       return;
+//     }
+
+//     try {
+//       const response = await axios.post('http://localhost:8000/signup', {
+//         username: name,
+//         email,
+//         phone,
+//         password,
+//       });
+
+//       if (response.status === 201) {
+//         setMessage(response.data.message);
+//         setIsError(false);
+//         setTimeout(() => navigate('/login'), 2000); // Navigate after success
+//       }
+//     } catch (error) {
+//       if (error.response) {
+//         setMessage(error.response.data.message || 'Something went wrong');
+//         setIsError(true);
+//       } else {
+//         setMessage('Unable to connect to the server.');
+//         setIsError(true);
+//       }
+//     }
+//   };
+
+//   return (
+//     <div className="sgback">
+//       <div className="signupbox">
+//         <h2 className="lgsize1 label1">Signup</h2>
+//         {message && (
+//           <div
+//             style={{
+//               color: isError ? 'red' : 'green',
+//               marginBottom: '10px',
+//               fontWeight: 'bold',
+//             }}
+//           >
+//             {message}
+//           </div>
+//         )}
+//         <form onSubmit={handleSubmit}>
+//           <div className="mail1">
+//             <label htmlFor="name">
+//               <h3 className="lgsize2 label1">Name:</h3>
+//             </label>
+//             <input
+//               type="text"
+//               name="name"
+//               id="name"
+//               placeholder="Enter Name"
+//               className="input3 he1"
+//               value={name}
+//               onChange={(e) => setName(e.target.value)}
+//               required
+//             />
+//           </div>
+//           <div className="mail1">
+//             <label htmlFor="email">
+//               <h3 className="lgsize2 label1">Email:</h3>
+//             </label>
+//             <input
+//               type="email"
+//               name="email"
+//               id="email"
+//               placeholder="Enter Email"
+//               className="input3 he1"
+//               value={email}
+//               onChange={(e) => setEmail(e.target.value)}
+//               required
+//             />
+//           </div>
+//           <div className="mail1">
+//             <label htmlFor="phone">
+//               <h3 className="lgsize2 label1">Phone:</h3>
+//             </label>
+//             <input
+//               type="text"
+//               name="phone"
+//               id="phone"
+//               placeholder="Enter Phone No."
+//               className="input3 he1"
+//               value={phone}
+//               onChange={(e) => setPhone(e.target.value)}
+//               required
+//             />
+//           </div>
+//           <div className="mail1">
+//             <label htmlFor="password">
+//               <h3 className="lgsize2 label1">Password:</h3>
+//             </label>
+//             <input
+//               type="password"
+//               name="password"
+//               id="password"
+//               placeholder="Enter Password"
+//               className="input3 he1"
+//               value={password}
+//               onChange={(e) => setPassword(e.target.value)}
+//               required
+//             />
+//           </div>
+//           <button type="submit" className="submit">
+//             <b>Signup</b>
+//           </button>
+//           <div className="a">
+//             <p>
+//               Already have an account?{' '}
+//               <Link to="/login">
+//                 <u className="go">LOGIN</u>
+//               </Link>
+//             </p>
+//           </div>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Signup;
+
+
