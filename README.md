@@ -86,7 +86,7 @@ Example signup request:
 ## Project Structure
 
 ```text
-ServicePortal/
+service-portal/
 ├── backend/
 │   ├── index.js              # Express server, database models, and API routes
 │   ├── package.json
@@ -124,8 +124,8 @@ ServicePortal/
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
-cd ServicePortal
+git clone https://github.com/Gourav7581/service-portal.git
+cd service-portal
 ```
 
 ### 2. Configure the backend
