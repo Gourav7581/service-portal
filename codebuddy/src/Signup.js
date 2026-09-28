@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { Link } from 'react-router-dom';
  import { useState } from 'react'
-import axios from 'axios'
+import api from './config/api'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -25,7 +25,7 @@ function Signup() {
       }
 
  try {
-  const response = await axios.post('http://localhost:8000/signup', {
+  const response = await api.post('/signup', {
     username: name,
     email,
     phone,

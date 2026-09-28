@@ -3,7 +3,7 @@ import './App.css';
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 
-import axios from 'axios';
+import api from './config/api';
 
 
 function Home() {
@@ -27,7 +27,7 @@ function Home() {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/logout', {}, { withCredentials: true });
+      const response = await api.post('/logout');
       if (response.data.success) {
         localStorage.removeItem('codebuddyUser');
         setIsLoggedIn(false);

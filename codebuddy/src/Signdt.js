@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './config/api';
 
 const Signdt = () => {
   const [users, setUsers] = useState([]);
@@ -8,7 +8,7 @@ const Signdt = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/user'); // Backend API endpoint
+        const response = await api.get('/user');
         if (response.data.code === 200) {
           setUsers(response.data.data); // Set users in state
         } else {

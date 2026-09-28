@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from './config/api';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -17,7 +17,7 @@ function Login() {
     setIsLoading(true);
   
     try {
-      const response = await axios.post('http://localhost:8000/login', { email, password }, { withCredentials: true });
+      const response = await api.post('/login', { email, password });
       if (response.data.success) {
        localStorage.setItem('codebuddyUser', JSON.stringify(response.data.user));
        window.dispatchEvent(new Event('authchange'));
