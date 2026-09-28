@@ -35,9 +35,24 @@ app.use('/codebuddy', express.static('codebuddy'));
 
 // ======================== CORS LIBRARY ================================================================
 // ye react ke loaclhost ko handle krta he acces krne ke liye yani ye backend ko btata he ki data kis loaclhost se lena he,server ko batta he data kha se lena he
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://service-portal-1-r55e.onrender.com',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001"],
+  origin(origin, callback) {
+    // Requests without an Origin header include health checks and server-to-server calls.
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
 
@@ -46,7 +61,7 @@ app.use(cookieParser()); // ye id ko handle krta he
 
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
@@ -137,10 +152,12 @@ app.post('/login', async (req, res) => {
       { expiresIn: '1d' }
     );
 
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -157,7 +174,12 @@ app.post('/login', async (req, res) => {
 app.post('/logout', (req, res) => {
   try {
     // Clear the token cookie
-    res.clearCookie('token');
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+    });
     res.status(200).json({ success: true, message: 'Logout successful' });
   } catch (error) {
     console.error('Logout error:', error.message);
@@ -198,9 +220,9 @@ app.post('/forgot-password', async (req, res) => {
 
 
 // ============================================Start server=====================================
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  console.log(`Server is running at ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
 
 
